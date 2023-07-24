@@ -4,9 +4,9 @@ import com.app.springbootjwtpostgres.entity.Role;
 import com.app.springbootjwtpostgres.entity.User;
 import com.app.springbootjwtpostgres.repository.RoleRepository;
 import com.app.springbootjwtpostgres.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired; // This annotation allows us to inject other components into this class.
-import org.springframework.security.crypto.password.PasswordEncoder; // This interface provides methods for encoding and verifying passwords.
-import org.springframework.stereotype.Service; // This annotation marks this class as a service component that will be managed by Spring.
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -19,11 +19,8 @@ public class UserService {
     @Autowired // This annotation allows us to inject the RoleRepository interface into this class.
     private RoleRepository roleRepository;
 
-    @Autowired // This annotation allows us to inject the PasswordEncoder interface into this class.
-    private PasswordEncoder passwordEncoder;
-
     public User saveUser(User user) { // This method saves a user entity to the database.
-        user.setPassword(passwordEncoder.encode(user.getPassword())); // This line encodes the user's password using the PasswordEncoder interface.
+        user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword())); // This line encodes the user's password using the PasswordEncoder interface.
         return userRepository.save(user); // This line saves the user entity using the UserRepository interface.
     }
 
